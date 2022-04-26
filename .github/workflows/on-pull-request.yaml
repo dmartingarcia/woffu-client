@@ -11,13 +11,3 @@ jobs:
       uses: andrewmcodes/rubocop-linter-action@v3.3.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  reek:
-    name: Reek
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.7'
-      - run: gem install reek --no-doc
-      - run: reek .
