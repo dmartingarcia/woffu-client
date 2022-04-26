@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    woffu (0.1.0)
+    woffu (0.1.1)
       nokogiri (~> 1.13)
       tweakphoeus (~> 0.6)
 
@@ -14,6 +14,8 @@ GEM
     ffi (1.15.5)
     minitest (5.15.0)
     nokogiri (1.13.4-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.4-x86_64-linux)
       racc (~> 1.4)
     parallel (1.22.1)
     parser (3.1.2.0)
