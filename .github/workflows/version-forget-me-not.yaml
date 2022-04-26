@@ -1,0 +1,17 @@
+name: Version Forget-Me-Not
+
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+    types: [opened, synchronize]
+
+jobs:
+  semver-check:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: simplybusiness/version-forget-me-not@v2.1.0
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION_FILE_PATH: "lib/woffu/version.rb"
