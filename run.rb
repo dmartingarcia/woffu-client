@@ -10,8 +10,8 @@ end
 pass = ENV['WOFFU_PASSWORD']
 user = ENV['WOFFU_EMAIL'] 
 
-user = get_user_input_for("woffu email") if user.empty?
-pass = get_user_input_for("password") if pass.empty?
+user = get_user_input_for("woffu email") if user.nil? || user.empty?
+pass = get_user_input_for("password") if user.nil? || pass.empty?
 
 login_response = Typhoeus.get('https://app.woffu.com/token', body: {grant_type: :password, username: user, password: pass})
 
