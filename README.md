@@ -17,5 +17,5 @@ WOFFU_EMAIL and WOFFU_PASSWORD as environment variables for faster usage.
 Use `docker run --platform linux/amd64 -it dmartingarcia0/woffu-client:0.1-alpine`
 
 ## Supporting me 
-If you find this useful, you can invite me to a beer or two [here](https://www.buymeacoffee.com/dmartingarcia0), it will improve my focus by +200%
+If you find this useful, you can invite me to a beer or two [here](https://www.buymeacoffee.com/dmartingarcia0), it will improve my focus by +9999% :beers: 
 
