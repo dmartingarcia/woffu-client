@@ -1,0 +1,23 @@
+name: 'Execute the script'
+
+on:
+  schedule:
+    - cron: '00 9 * * 1-5'
+
+jobs:
+  run_script:
+    runs-on: ${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '3.1' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
+      - run: bundle install
+      - shell: bash
+        env:
+          WOFFU_EMAIL: ${{ secrets.USERNAME }}
+          WOFFU_PASSWORD: ${{ secrets.PWD }}
+        run: |
+          ruby run.rb
