@@ -7,6 +7,9 @@ on:
       - 'releases/**'
   schedule:
     - cron: '00 9 * * 1-5'
+    - cron: '00 14 * * 1-5'
+    - cron: '00 15 * * 1-5'
+    - cron: '00 18 * * 1-5'
 
 jobs:
   run_script:
