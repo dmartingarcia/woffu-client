@@ -17,15 +17,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
-          bundler-cache: true
-      - run: bundle install
-      - shell: bash
+          ruby-version: 3.1
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Running Ruby script
         env:
           WOFFU_EMAIL: ${{ secrets.WOFFU_EMAIL }}
           WOFFU_PASSWORD: ${{ secrets.WOFFU_PASSWORD }}
         run: |
-          ruby run.rb
+          bundle install; ruby run.rb
