@@ -1,6 +1,10 @@
 name: 'Execute the script'
 
 on:
+  push:
+    branches:
+      - master
+      - 'releases/**'
   schedule:
     - cron: '00 9 * * 1-5'
 
@@ -17,7 +21,7 @@ jobs:
       - run: bundle install
       - shell: bash
         env:
-          WOFFU_EMAIL: ${{ secrets.USERNAME }}
-          WOFFU_PASSWORD: ${{ secrets.PWD }}
+          WOFFU_EMAIL: ${{ secrets.WOFFU_EMAIL }}
+          WOFFU_PASSWORD: ${{ secrets.WOFFU_PASSWORD }}
         run: |
           ruby run.rb
