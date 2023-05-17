@@ -63,7 +63,7 @@ personal_setup = JSON.parse(personal_setup.body)
 workday_lite = Typhoeus.get("https://#{api_domain}/api/users/#{user_id}/workdaylite", headers: authorization_headers)
 workday_lite = JSON.parse(workday_lite.body)
 
-time_spans = workday_lite["TimeSpans"].map{|e| [e["StartTime"], e["EndTime"]]}
+today_time_spans = workday_lite["TimeSpans"]&.map{|e| [e["StartTime"], e["EndTime"]]}
 
 date_yesterday = (Date.today - 1).to_s
 date_60_days_ago = (Date.today - 60).to_s
@@ -121,7 +121,9 @@ def generate_diary_slot(sign_id: nil, user_id: nil, date: nil, time_start: nil, 
   }
 end
 
-def put_diary_slots(bearer_token: nil, diary_id: nil, user_id: nil, start: nil, break_start: nil, break_stop: nil, stop: nil, department_id: nil, job_title_id: nil, calendar_id: nil, schedule_id: nil, break_time: 1, date: nil, sign_id: 0)
+authorization_headers_with_content_type = authorization_headers.merge({"content-type" => "application/json;charset=UTF-8"})
+
+def put_diary_slots(authorization_headers: nil, bearer_token: nil, diary_id: nil, user_id: nil, start: nil, break_start: nil, break_stop: nil, stop: nil, department_id: nil, job_title_id: nil, calendar_id: nil, schedule_id: nil, break_time: 1, date: nil, sign_id: 0, api_domain: nil)
   body = {
     "DiaryId" => diary_id,
     "UserId" => user_id,
@@ -142,7 +144,7 @@ def put_diary_slots(bearer_token: nil, diary_id: nil, user_id: nil, start: nil, 
     ]
   }
 
-  diary_slot = Typhoeus.put("https://#{api_domain}/api/diaries/#{diary_id}/workday/slots/self", headers: authorization_headers_with_content_type), body: body.to_json)
+  diary_slot = Typhoeus.put("https://#{api_domain}/api/diaries/#{diary_id}/workday/slots/self", headers: authorization_headers, body: body.to_json)
   raise "Error!! Date: #{date}" if diary_slot.response_code != 204
 end
 
@@ -152,30 +154,30 @@ puts "Everything set as expected! ;)" if diaries_invalid.empty?
 
 diaries_invalid.each do |invalid_diary|
   puts invalid_diary
-  puts "Diary #{invalid_diary[:date]} will be overriden. [y/n]"
-  input = gets
-  next if input.chomp != "y"
+  puts "Diary #{invalid_diary[:date]} will be overriden."
 
-  put_diary_slots(bearer_token: bearer_token, diary_id: invalid_diary[:id], user_id: user_id, start: "09:00:00", break_start: "14:00:00", break_stop: "15:00:00", stop: "18:00:00", department_id: department_id, job_title_id: job_title_id, calendar_id: calendar_id, schedule_id: schedule_id, break_time: break_time, date: invalid_diary[:date].split("T").first, sign_id: 0, authorization_headers_with_content_type)
+  put_diary_slots(bearer_token: bearer_token, diary_id: invalid_diary[:id], user_id: user_id, start: "09:00:00", break_start: "14:00:00", break_stop: "15:00:00", stop: "18:00:00", department_id: department_id, job_title_id: job_title_id, calendar_id: calendar_id, schedule_id: schedule_id, break_time: break_time, date: invalid_diary[:date].split("T").first, sign_id: 0, authorization_headers: authorization_headers_with_content_type, api_domain: api_domain)
 end
 
-def sign_in(value: false, user_id: nil, api_domain: nil, authorization_headers)
+def sign_in(authorization_headers: nil, value: false, user_id: nil, api_domain: nil)
 
   body = {
     "AgreementEventId" => nil,
     "DeviceId" => "WebApp",
-    "EndDate" => "2023-05-11T09:22:18+02:00",
+    "EndDate" => DateTime.now.to_s,
     "Latitude" => nil,
     "Longitude" => nil,
     "RequestId" => nil,
     "ShortTrueTime" => "09:22:18",
-    "StartDate" => "2023-05-11T09:22:18+02:00",
+    "StartDate" => DateTime.now.to_s,
     "TimezoneOffset" => "120",
     "UserId" => user_id,
     "signIn" => value
   }
 
-  Typhoeus.post("https://#{api_domain}/api/svc/signs/signs", body: body, headers: authorization_headers)
+  Typhoeus.post("https://#{api_domain}/api/svc/signs/signs", body: body.to_json, headers: authorization_headers)
 end
 
-sign_in(value: true, user_id: user_id, api_domain: api_domain, authorization_headers: authorization_headers_with_content_type)
+if today_time_spans
+  sign_in(value: false, user_id: user_id, authorization_headers: authorization_headers_with_content_type, api_domain: api_domain)
+end
