@@ -6,10 +6,10 @@ on:
       - master
       - 'releases/**'
   schedule:
-    - cron: '00 9 * * 1-5'
+    - cron: '30 6 * * 1-5'
+    - cron: '00 13 * * 1-5'
     - cron: '00 14 * * 1-5'
-    - cron: '00 15 * * 1-5'
-    - cron: '00 18 * * 1-5'
+    - cron: '30 15 * * 1-5' # UTC
 
 jobs:
   run_script:
@@ -21,7 +21,6 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '3.1' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
-          bundler-cache: true
       - run: bundle install
       - shell: bash
         env:
