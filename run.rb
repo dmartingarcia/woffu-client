@@ -12,7 +12,7 @@ options = {}
 OptionParser.new do |opt|
   opt.on('-e', '--email EMAIL', 'Woffu user') { |o| options[:email] = o }
   opt.on('-p', '--password PASSWORD', 'Password') { |o| options[:password] = o }
-  opt.on('-m', '--fill-empty-presence', 'enable filling presence gaps') { options[:fill_presence] = true }
+  opt.on('-f', '--fill-empty-presence', 'enable filling presence gaps') { options[:fill_presence] = true }
   opt.on('-s', '--sign', 'enable sign process') { options[:sign] = true }
 end.parse!
 
