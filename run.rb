@@ -1,14 +1,23 @@
 require 'typhoeus'
 require 'json'
 require 'date'
+require 'optparse'
 
 def get_user_input_for(variable_name)
   puts "Please, introduce your #{variable_name}"
   gets.chomp
 end
 
-pass = ENV['WOFFU_PASSWORD']
-user = ENV['WOFFU_EMAIL'] 
+options = {}
+OptionParser.new do |opt|
+  opt.on('-e', '--email EMAIL', 'Woffu user') { |o| options[:email] = o }
+  opt.on('-p', '--password PASSWORD', 'Password') { |o| options[:password] = o }
+  opt.on('-m', '--fill-empty-presence', 'enable filling presence gaps') { options[:fill_presence] = true }
+  opt.on('-s', '--sign', 'enable sign process') { options[:sign] = true }
+end.parse!
+
+pass = options[:password] || ENV['WOFFU_PASSWORD']
+user = options[:email] || ENV['WOFFU_EMAIL']
 
 user = get_user_input_for("woffu email") if user.nil? || user&.empty?
 pass = get_user_input_for("password") if pass.nil? || pass&.empty?
