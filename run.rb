@@ -157,11 +157,10 @@ def put_diary_slots(authorization_headers: nil, bearer_token: nil, diary_id: nil
   raise "Error!! Date: #{date}" if diary_slot.response_code != 204
 end
 
-diaries_invalid = diaries_details.reject{|e| e[:hours_to_work] == e[:hours_worked] || e[:hours_to_work] == e[:not_categorised]}
-
-puts "Everything set as expected! ;)" if diaries_invalid.empty?
+diaries_invalid = diaries_details.reject{|e| e[:hours_to_work] <= e[:hours_worked] || e[:hours_to_work] <= e[:not_categorised]}
 
 diaries_invalid.each do |invalid_diary|
+  next unless options[:fill_presence]
   puts invalid_diary
   puts "Diary #{invalid_diary[:date]} will be overriden."
 
@@ -187,6 +186,6 @@ def sign_in(authorization_headers: nil, value: false, user_id: nil, api_domain: 
   Typhoeus.post("https://#{api_domain}/api/svc/signs/signs", body: body.to_json, headers: authorization_headers)
 end
 
-if today_time_spans
+if today_time_spans && options[:sign]
   sign_in(value: false, user_id: user_id, authorization_headers: authorization_headers_with_content_type, api_domain: api_domain)
 end
