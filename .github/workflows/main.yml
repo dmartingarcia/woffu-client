@@ -25,7 +25,7 @@ jobs:
           WOFFU_EMAIL: ${{ secrets.WOFFU_EMAIL }}
           WOFFU_PASSWORD: ${{ secrets.WOFFU_PASSWORD }}
         run: |
-          (echo "===== Attempt: 1 ====" && ruby run.rb) || \
-          (echo "===== Attempt: 2 ====" && ruby run.rb) || \
-          (echo "===== Attempt: 3 ====" && ruby run.rb) || \
+          (echo "===== Attempt: 1 ====" && ruby run.rb -s) || \
+          (echo "===== Attempt: 2 ====" && ruby run.rb -s) || \
+          (echo "===== Attempt: 3 ====" && ruby run.rb -s) || \
           (echo "==== Step Failed ====" && exit 1)
