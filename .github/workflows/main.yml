@@ -7,8 +7,6 @@ on:
       - 'releases/**'
   schedule:
     - cron: '30 6 * * 1-5'
-    - cron: '00 13 * * 1-5'
-    - cron: '00 14 * * 1-5'
     - cron: '30 15 * * 1-5' # UTC
 
 jobs:
@@ -27,4 +25,7 @@ jobs:
           WOFFU_EMAIL: ${{ secrets.WOFFU_EMAIL }}
           WOFFU_PASSWORD: ${{ secrets.WOFFU_PASSWORD }}
         run: |
-          ruby run.rb
+          (echo "===== Attempt: 1 ====" && ruby run.rb) || \
+          (echo "===== Attempt: 2 ====" && ruby run.rb) || \
+          (echo "===== Attempt: 3 ====" && ruby run.rb) || \
+          (echo "==== Step Failed ====" && exit 1)
